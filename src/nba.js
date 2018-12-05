@@ -2,12 +2,13 @@
 const cheerio = require('cheerio')
 const axios = require('axios')
 const nodemailer = require('nodemailer')
-//const schedule = require('node-schedule')
-const SCHEDULE_RULE = '1 30 6 * * *'
+const iconv = require('iconv-lite')
+const BufferHelper = require('bufferhelper')
+const http = require('http')
 
 
-//const KEYWORD = '杜兰特'
-//const KEYWORD_REG = new RegExp(KEYWORD, 'i')
+// const KEYWORD = '杜兰特'
+// const KEYWORD_REG = new RegExp(KEYWORD, 'i')
 
 const url = 'http://sports.163.com/special/nbagd2016/'
 const url2 = 'http://sports.sina.com.cn/nba/'
@@ -15,14 +16,18 @@ const url3 = 'https://nba.hupu.com/'
 
 let newsArry = []
 
-let nbaSpider = function (email,KEYWORD) {
-    return axios.get(url).then(response => {
-        if (response.status === 200) {
+let nbaSpider = function (email, KEYWORD) {
+    http.get(url, res => {
+        let html = ''
+        let bufferHelper = new BufferHelper()
+        res.on('data', chunk => {
+            bufferHelper.concat(chunk)
+        })
+        res.on('end', () => {
             const KEYWORD_REG = new RegExp(KEYWORD, 'i')
-            let $ = cheerio.load(response.data)
-
+            let zzc = iconv.decode(bufferHelper.toBuffer(), 'GBK')
+            let $ = cheerio.load(zzc)
             let news = $('a[href]')
-            newsArry = []
             for (let i = 0; i < news.length; ++i) {
                 let textHref = $(news[i])
                 let text = $(news[i]).text()
@@ -34,11 +39,11 @@ let nbaSpider = function (email,KEYWORD) {
                     })
                 }
             }
-        }
-        nbaSpiderqq(email,KEYWORD,newsArry)
+            //console.log('213123', newsArry)
+            nbaSpiderqq(email, KEYWORD, newsArry)
+        })
     })
 }
-
 let nbaSpiderqq = function (email, KEYWORD, newsArry) {
     return axios.get(url3).then(response => {
         if (response.status === 200) {
@@ -80,7 +85,8 @@ function nbaSpidersina(email,KEYWORD,newsArry) {
                     })
                 }
             }
-            formStr(newsArry);
+            //console.log(newsArry)
+            //formStr(newsArry);
         }
 
         function formStr(arr) {

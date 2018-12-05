@@ -5,7 +5,9 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.18.0",
+    "bufferhelper": "^0.2.1",
     "cheerio": "^1.0.0-rc.2",
+    "iconv-lite": "^0.4.24",
     "koa": "^2.6.2",
     "koa-body": "^4.0.4",
     "koa-router": "^7.4.0",
