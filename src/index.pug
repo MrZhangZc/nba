@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        title nba新闻
+        link(rel="stylesheet", href="index.css")
+    body
+        form.form(method="post", action="nba")
+            h3.title 获取nba新闻
+            lable.lable(for="email") 输入邮箱
+            input#email.input(type="text", name="email")
+            br
+            lable.lable(for="nbaname") 输入球员名称
+            input#nbaname.input(type="text", name="nbaname")
+            br
+            button.btn(type="submit") 发送
